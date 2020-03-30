@@ -1,0 +1,21 @@
+---
+objects:
+  - data: DAFile
+  - osoba: Individual
+---
+mandatory: True
+question: |
+  Nahrajte soubor z předchozího interview.
+fields:
+  - Soubor: data
+    datatype: file
+---
+mandatory: True
+code: |
+  people = objects_from_file(data[0].number, use_objects=True)
+---
+mandatory: true
+question: |
+  Vaše data
+subquestion: |
+  * ${ people['osoba'] }

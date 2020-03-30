@@ -1,0 +1,13 @@
+---
+code: |
+  for polozka in interview_list():
+    if polozka['title'] == 'Odvolání ve správním řízení':
+      predchozi = get_session_variables(polozka['filename'], polozka['session']) 
+---
+mandatory: True
+question: |
+  Vaše interview
+subquestion: |
+  % for test in predchozi:
+  * ${ test }
+  % endfor

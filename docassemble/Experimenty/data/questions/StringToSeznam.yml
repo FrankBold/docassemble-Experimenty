@@ -1,0 +1,32 @@
+metadata:
+  title: |
+    String -> Array
+  description: |
+    Test převodu vyplnění stringu do array
+---
+modules:
+  - .testing
+---
+objects:
+  - Ucel: DAList.using(there_are_any=True)
+---
+mandatory: True
+question: |
+  Vyplňte účely spolku
+subquestion: |
+  Jednotlivé položky "odentrujte"7
+fields:
+  Účely spolku: spolek_ucely
+  datatype: area
+---
+mandatory: True
+code:
+  Ucel = string_pole(spolek_ucely)
+---
+mandatory: True
+question: |
+  Zobrazení pole
+subquestion: |
+  Jednotlivé položky:
+  ${ Ucel }
+  
