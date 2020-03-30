@@ -1,0 +1,77 @@
+generic object: Organization
+question: |
+  Identifikační údaje osoby
+fields:
+  - Název: x.name.text
+  - Ulice a číslo popisné: x.address
+  - PSČ: x.zip
+  - Obec: x.city
+---
+generic object: Person
+question: |
+  Indetifikační údaje osoby 
+fields:
+  - Typ osoby: x.forma
+    input type: radio
+    choices:
+      - Právnická osoba: PO
+      - Fyzická osoba: FO
+  - Jméno a příjmení: x.name.text
+    show if:
+      variable: x.forma
+      is: FO
+  - Ulice a číslo popisné: x.address
+    show if:
+      variable: x.forma
+      is: FO
+  - Obec: x.city
+    show if:
+      variable: x.forma
+      is: FO
+  - PSČ: x.zip
+    show if:
+      variable: x.forma
+      is: FO
+  - Datum narození: x.birthday
+    datatype: date
+    show if:
+      variable: x.forma
+      is: FO
+  - Název organizace: x.name.text
+    show if:
+      variable: x.forma
+      is: PO
+  - Ulice a číslo popisné: x.address
+    show if:
+      variable: x.forma
+      is: PO
+  - Obec: x.city
+    show if:
+      variable: x.forma
+      is: PO
+  - PSČ: x.zip
+    show if:
+      variable: x.forma
+      is: PO
+  - IČO: x.ic
+    datatype: integer
+    minlength: 8
+    maxlength: 8
+    show if:
+      variable: x.forma
+      is: PO
+  - note: |
+      **Zástupce společnosti**
+    show if:
+      variable: x.forma
+      is: PO
+  - Vaše jméno: x.zastupceName
+    required: False
+    show if:
+      variable: x.forma
+      is: PO
+  - Vaše funkce v organizaci: x.zastupceFunkce
+    required: False
+    show if:
+      variable: x.forma
+      is: PO

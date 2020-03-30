@@ -1,0 +1,113 @@
+metadata:
+  title: Ustavující schůze
+  tags:
+    - ustavujiciSchuze
+  short title: |
+    Ústavující schůze
+  description: |
+    Rozhraní pro vytvoření zápisu z ústavujícíc schůze
+  authors:
+    - name: Michal Kuk
+      organization: Frank Bold
+  revision_date: 2019-11-11
+  help label: |
+    Nápověda
+---
+features:
+  bootstrap theme: https://bootswatch.com/4/simplex/bootstrap.min.css
+  question help button: True
+---
+interview help:
+  label: Nápověda
+  heading: Základní nápověda
+  content: |
+    Základní informace naleznete zde.
+---
+modules:
+  - docassemble.base.legal
+---
+mandatory: True
+code: |
+  multi_user = True
+---
+include:
+  - ObjektOsoba.yml
+---
+event: pridat_pritomneho
+code: |
+  if vsichni == False:
+    schuze.pritomni.appendObject(Person)
+---
+objects:
+  - spolek: Thing
+  - schuze: Thing
+  - schuze.zapis: DAList
+  - schuze.svolatel: Person
+  - schuze.pritomni: PartyList
+---
+mandatory: True
+question: |
+  Základní informace
+subquestion: |
+  Informace k vyplnění před samotným konáním schůze.
+fields:
+  - Název spolku: spolek.name.text
+  - Jméno svolatele: schuze.svolatel.name.text
+  - Den konání schůze: schuze.konana
+    datatype: date
+  - Den svolání schůze: schuze.svolana
+    datatype: date
+  - Obec konání schůze: schuze.obec
+  - Chcete vyplnti Listinu přítomných zde v rozhraní?: schuze.pritomni.there_are_any
+    datatype: yesnoradio
+help: |
+  # Listina přítomných
+  Listinu přítomných můžete buď vyplnit zde online, nebo ji vystisknou a vyplnit na místě.
+  Pokud budete podávat návrh k soudu elektronicky, doporučujeme vyplnit jej online, protože jinak budete muset vyřizovat konverzi dokumentů.
+---
+question: |
+  Údaje ${ ordinal(i) } přítomného?
+fields:
+  - Jméno a příjmení: schuze.pritomni[i].name.first
+  - Bydliště: schuze.pritomni[i].address
+  - Je na schůzi ještě někdo?: schuze.pritomni.there_is_another
+    datatype: yesnoradio
+---
+generic object: Person
+question: |
+  Podepiště se
+signature: x.podpis
+under: |
+  ${ x.name.first }
+  
+  Odkaz k podpisu: [this URL](${ interview_url() }).
+---
+mandatory: True
+question: |
+  Je celkem ${ schuze.pritomni.number_as_word() } přítomných.
+subquestion: |
+  Přítomni jsou ${ schuze.pritomni }.
+  % for pritomen in schuze.pritomni:
+  Podepsání: ${ pritomen.podpis }.
+  % endfor
+  
+  Upravit seznam přítomných: 
+  ${ schuze.pritomni.table }
+---
+table: schuze.pritomni.table
+rows: schuze.pritomni
+columns:
+  - Jméno: |
+      row_item.name.first
+  - Podpis: |
+      row_item.podpis
+edit:
+  - name.first
+  - podpis
+---
+mandatory: true
+question: |
+  Výstup
+subquestion: |
+  `${ all_variables() }`
+  

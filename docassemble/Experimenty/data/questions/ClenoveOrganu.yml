@@ -1,0 +1,64 @@
+modules:
+  - docassemble.base.legal
+---
+include:
+  - ObjektOsoba.yml
+---
+objects:
+  - Spolek.statutar: Thing
+  - Spolek.statutar.clen: PartyList.using(there_are_any=True)
+  - Spolek: Thing
+  - Spolek.sidlo: Address
+  - Spolek.sidlo.vlastnik: Person
+---
+mandatory: True
+question: |
+  Kdo bude statutární orgán?
+fields:
+  - Jaký statutární orgán chcete?: Spolek.statutar.druh
+    datatype: radio
+    choices:
+      - Jednočlenný: jedno
+      - Vícečlenný: vice
+  - Počet členů: Spolek.statutar.pocet
+    datatype: integer
+    min: 2
+    show if:
+      variable: Spolek.statutar.druh
+      is: vice
+---
+mandatory: True
+code: |
+  if Spolek.statutar.druh == 'jedno':
+    Spolek.statutar.pocet = 1
+  g = 1
+  while g <= Spolek.statutar.pocet:
+    Spolek.statutar.clen.appendObject(Person)
+    g += 1
+  Spolek.statutar.clen.there_is_another = False
+---
+question: |
+  Kdo je vlastníkem nemovitosti?
+fields:
+  - Někdo z dříve vyplněných: drive
+    datatype: yesnoradio
+  - Kdo: Spolek.sidlo.vlastnik
+    datatype: object_radio
+    choices: 
+    - Spolek.statutar.clen
+    show if: drive
+    disable others: True
+  - Jméno a příjmení: Spolek.sidlo.vlastnik.name.text
+    hide if: drive
+---
+mandatory: True
+question: |
+  Výsledek
+subquestion: |
+  Statutární orgán je:
+  
+  % for statutar in Spolek.statutar.clen:
+  * ${ statutar }
+  % endfor
+  
+  Majitel nemovitosti je: ${ Spolek.sidlo.vlastnik }

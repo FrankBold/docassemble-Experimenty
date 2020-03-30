@@ -1,0 +1,82 @@
+modules:
+  - .dastripe2
+---
+features:
+  javascript: https://js.stripe.com/v3/
+---
+objects:
+  - payment: DAStripe.using(payor=client, currency='czk')
+  - client: Individual
+  - client.billing_address: Address
+---
+mandatory: True
+code: |
+  # Payor information may be required for some payment methods.
+  client.name.first
+  # client.billing_address.address
+  # client.phone_number
+  # client.email
+  if not payment.paid:
+    payment_screen
+  favorite_fruit
+  final_screen
+---
+question: |
+  What is your name?
+fields:
+  - First: client.name.first
+  - Last: client.name.last
+---
+question: |
+  What is your phone number?
+fields:
+  - Phone: client.phone_number
+---
+question: |
+  What is your e-mail address?
+fields:
+  - Phone: client.email
+---
+question: |
+  What is your billing address?
+fields:
+  - Address: client.billing_address.address
+    address autocomplete: True
+  - Unit: client.billing_address.unit
+    required: False
+  - City: client.billing_address.city
+  - State: client.billing_address.state
+    code: states_list()
+  - Zip: client.billing_address.zip
+---
+question: |
+  Kolik chcete zaplatit?
+fields:
+  - Amount: payment.amount
+    datatype: currency
+---
+event: payment.demand
+question: |
+  Platba
+subquestion: |
+  Uveďte údaje platební karty.
+
+  ${ payment.html }
+script: |
+  ${ payment.javascript }
+---
+event: payment.success
+code: |
+  payment.process()
+---
+question: |
+  What is your favorite fruit?
+fields:
+  - Fruit: favorite_fruit
+---
+event: final_screen
+question: Your favorite fruit
+subquestion: |
+  It is my considered opinion
+  that your favorite fruit is
+  ${ favorite_fruit }.

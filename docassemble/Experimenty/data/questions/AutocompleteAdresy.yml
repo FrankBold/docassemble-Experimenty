@@ -1,0 +1,35 @@
+metadata:
+  title: |
+    Automatické doplnění adresy
+  short title: |
+    Testing
+---
+features:
+  javascript: 
+    - https://api.mapy.cz/loader.js
+    - loader.js
+    - mapy_api.js
+---
+objects:
+  - clovek: Address
+---
+css class: adresa_autocomplete
+question: |
+  Vaše kontaktní adresa
+fields:
+  - Ulice: clovek.address
+    required: False
+  - note: |
+      <div id="adresa"></div>
+  - Město: clovek.city
+    required: False
+  - Kraj: clovek.state
+    required: False
+  - PŠČ: clovek.zip
+    required: False
+  - Čp.: clovek.street_number
+    required: False
+---
+mandatory: True
+question: |
+  The city is ${ clovek.city }.
