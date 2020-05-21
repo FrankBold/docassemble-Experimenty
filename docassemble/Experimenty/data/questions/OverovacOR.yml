@@ -1,0 +1,72 @@
+metadata:
+  title: Ověření údajů v obchodním rejstříků
+---
+objects:
+  - Prodejce: Person
+  - moznosti: DAList.using(auto_gather=False)
+---
+modules:
+  - .overovac
+---
+question: |
+  Údaje o společnosti
+subquestion: |
+  <button id="run" class="btn btn-primary">Doplnit údaje z OR</button>
+  
+  <span id="hlasky"></span>
+fields:
+  - Název prodejce: Prodejce.name.text
+  - Sídlo: Prodejce.address
+  - IČO: Prodejce.ICO
+script: |
+  <script type="application/javascript" charset="utf-8">
+    $("#run").click(function(){
+      $("#hlasky").html("");
+      action_call('myaction', {firma: val('Prodejce.name.text'), ico: val('Prodejce.ICO')}, function(data){
+        if (typeof data.test.firma !== 'undefined') {
+        setField("Prodejce.name.text", data.test.firma);
+        setField("Prodejce.ICO", data.test.ico);
+        setField("Prodejce.address", data.test.sidlo);
+        } else if (typeof data.test == 'object') {
+          action_perform('vyberFirmy')
+        } else {
+        flash(data.test, "danger")
+        }
+      });
+      return false;
+    });
+  </script>
+---
+question: |
+  Vyber firmu, kterou chceš.
+fields:
+  - Firmy: zvolena_firma
+    input type: combobox
+    code: |
+      moznosti
+continue button field: vyberFirmy
+---
+event: vyberFirmy
+code: |
+  vystupNovy = overit("", zvolena_firma)
+  Prodejce.name.text = vystupNovy.firma
+  Prodejce.ICO = vystupNovy.ico
+  Prodejce.address = vystupNovy.sidlo
+---
+event: myaction
+code: |
+  moznosti.clear()
+  vystup = overit(action_argument('ico').strip('"'), action_argument('firma').strip('"'))
+  moznosti.extend(vystup)
+  moznosti.gathered = True
+  json_response(dict(test=vystup))
+---
+mandatory: True
+question: |
+  Společnost
+subquestion: |
+  Firma: ${ Prodejce.name.text }
+  
+  Sídlo: ${ Prodejce.address }
+  
+  IČO: ${ Prodejce.ICO }

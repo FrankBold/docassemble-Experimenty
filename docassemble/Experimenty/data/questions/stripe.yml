@@ -1,5 +1,5 @@
 modules:
-  - .dastripe2
+  - .dastripe
 ---
 features:
   javascript: https://js.stripe.com/v3/

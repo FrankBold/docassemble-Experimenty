@@ -34,12 +34,7 @@ class DAStripe(DAObject):
     if not self.is_setup:
       self.setup()
     return """\
-<label for="stripe-card-number" class="col-md-4 col-form-label da-form-label datext-right">Číslo karty</label>
-<div id="stripe-card-number" class="col-md-8"></div>
-<label for="stripe-card-number" class="col-md-4 col-form-label da-form-label datext-right">Datum platnosti</label>
-<div id="stripe-card-expiry" class="col-md-8"></div>
-<label for="stripe-card-cvc" class="col-md-4 col-form-label da-form-label datext-right">CVC</label>
-<div id="stripe-card-cvc" class="col-md-8"></div>
+<div id="stripe-card-element" class="mt-2"></div>
 <div id="stripe-card-errors" class="mt-2 mb-2 text-alert" role="alert"></div>
 <button class="btn """ + BUTTON_STYLE + self.button_color + " " + BUTTON_CLASS + '"' + """ id="stripe-submit">""" + word(self.button_label) + """</button>"""
 
@@ -64,7 +59,7 @@ class DAStripe(DAObject):
       if hasattr(self.payor.billing_address, 'country'):
         address['country'] = address.billing_country
       else:
-        address['country'] = 'CZ'
+        address['country'] = 'US'
     except:
       pass
     if len(address):
@@ -81,42 +76,13 @@ class DAStripe(DAObject):
 <script>
   var stripe = Stripe(""" + json.dumps(get_config('stripe public key')) + """);
   var elements = stripe.elements();
-  var elementStyles = {
+  var style = {
     base: {
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
-      height: 'calc(1.5em + 0.75rem + 2px)',
-      fontSize: '1rem',
-      fontWeight: '400',
-      lineHeight: '1.5',
-      color: '#5a5a5a',
-      backgroundColor: '#fff',
-      
-      '::placeholder': {
-        color: '#888',
-      },
-      ':-webkit-autofill': {
-        color: '#e39f48',
-      },
-    },
-    invalid: {
-      color: '#E25950',
-
-      '::placeholder': {
-        color: '#FFCCA5',
-      },
-    },
+      color: "#32325d",
+    }
   };
-  var cardNumber = elements.create('cardNumber', { style: elementStyles });
-  cardNumber.mount('#stripe-card-number');
-
-  var cardExpiry = elements.create('cardExpiry', { style: elementStyles });
-  cardExpiry.mount('#stripe-card-expiry');
-
-  var cardCvc = elements.create('cardCvc', { style: elementStyles });
-  cardCvc.mount('#stripe-card-cvc');
-
-  registerElements([cardNumber, cardExpiry, cardCvc], 'stripe');
-
+  var card = elements.create("card", { style: style });
+  card.mount("#stripe-card-element");
   card.addEventListener('change', ({error}) => {
     const displayError = document.getElementById('stripe-card-errors');
     if (error) {

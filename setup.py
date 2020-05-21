@@ -43,7 +43,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.Experimenty',
-      version='0.0.4',
+      version='0.0.5',
       description=('Experimenty pro účely dalších projektů'),
       long_description='# docassemble.DocassembleExperimenty\r\n\r\nExperimenty pro účely dalších projektů\r\n\r\n## Author\r\n\r\nMichal Kuk, michal.kuk@frankbold.org\r\n\r\n',
       long_description_content_type='text/markdown',
