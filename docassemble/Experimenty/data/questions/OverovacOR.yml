@@ -4,6 +4,7 @@ metadata:
 objects:
   - Prodejce: Person
   - moznosti: DAList.using(auto_gather=False)
+  - Subjekt: Person
 ---
 modules:
   - .overovac
@@ -15,9 +16,12 @@ subquestion: |
   
   <span id="hlasky"></span>
 fields:
-  - Název prodejce: Prodejce.name.text
-  - Sídlo: Prodejce.address
   - IČO: Prodejce.ICO
+    hint: 12345678
+  - Název prodejce: Prodejce.name.text
+    required: False
+  - Sídlo: Prodejce.address
+    required: False
 script: |
   <script type="application/javascript" charset="utf-8">
     $("#run").click(function(){
@@ -55,10 +59,7 @@ code: |
 ---
 event: myaction
 code: |
-  moznosti.clear()
-  vystup = overit(action_argument('ico').strip('"'), action_argument('firma').strip('"'))
-  moznosti.extend(vystup)
-  moznosti.gathered = True
+  vystup = overitXml(action_argument('ico').strip('"'), action_argument('firma').strip('"'))
   json_response(dict(test=vystup))
 ---
 mandatory: True

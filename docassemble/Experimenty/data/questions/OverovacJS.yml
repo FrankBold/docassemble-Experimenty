@@ -1,0 +1,34 @@
+metadata:
+  title: Ověření údajů v obchodním rejstříků
+---
+objects:
+  - Prodejce: Person
+---
+modules:
+  - .overAres
+---
+question: |
+  Údaje o společnosti
+fields:
+  - Název prodejce: Prodejce.name.text
+    required: False
+  - IČO: Prodejce.ICO
+    required: False
+---
+event: myaction
+sets: Prodejce.adresa
+code: |
+  vystup = overitAres(Prodejce.ICO)
+  Prodejce.adresa = vystup['address']['street']
+  Prodejce.ICO = vystup['legal']['company_id']
+  Prodejce.name.text = vystup['legal']['company_name']
+---
+mandatory: True
+question: |
+  Společnost
+subquestion: |
+  Firma: ${ Prodejce.name.text }
+  
+  Sídlo: ${ Prodejce.adresa }
+  
+  IČO: ${ Prodejce.ICO }
