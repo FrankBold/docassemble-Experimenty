@@ -1,0 +1,32 @@
+metadata:
+  title: |
+    Podnět k projednání na zastupitelstvu
+---
+modules:
+  - .pocetObyvatel
+---
+question: |
+  O jakou obec se jedná?
+subquestion: |
+  ${ url_of('obyvatele_full.csv', _external=True) }
+fields:
+  - Název obce: obec
+    default: |
+      Stvolínky
+---
+question: |
+  Vyberte z jakého okresu je Vámi zadaná obec
+fields:
+  - Okres: okres
+    datatype: radio
+    code: |
+      moznosti
+---
+mandatory: True
+question: |
+  Potřebný počet podpisů
+subquestion: |
+  Pro podání žádosti v obci ${ obec } potřebujete ${ pocetPodpis } podpisů.
+---
+code: |
+  pocetPodpis = pocetObyvatel(obec)
