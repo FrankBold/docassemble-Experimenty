@@ -4,31 +4,31 @@ metadata:
   short title: |
     Testing
 ---
-features:
-  javascript: 
-    - https://api.mapy.cz/loader.js
-    - loader.js
-    - mapy_api.js
+#features:
+#  javascript: 
+#    - https://api.mapy.cz/loader.js
+#    - loader.js
+#    - mapy_api.js
 ---
 objects:
   - clovek: Address
 ---
-css class: adresa_autocomplete
+
 question: |
   Vaše kontaktní adresa
 fields:
   - Ulice: clovek.address
     required: False
-  - note: |
-      <div id="adresa"></div>
   - Město: clovek.city
     required: False
   - Kraj: clovek.state
     required: False
   - PŠČ: clovek.zip
     required: False
-  - Čp.: clovek.street_number
-    required: False
+script: |
+  <script src="https://api.mapy.cz/loader.js"></script>
+  <script src="/packagestatic/docassemble.playground1Experimenty/loader.js"></script>
+  <script src="/packagestatic/docassemble.playground1Experimenty/mapy_api.js"></script>
 ---
 mandatory: True
 question: |

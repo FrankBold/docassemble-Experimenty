@@ -1,0 +1,16 @@
+mandatory: True
+question: |
+  Zde je textový výstup
+subquestion: |
+  ${ ocr_file(Cestak) }
+script: |
+  <script>
+    var obsah = $('div.da-subquestion').html().replace(/(jsme)/gi,'<strong>NEJSME!!!</strong>');
+    $('div.da-subquestion').html(obsah);
+  </script>
+---
+question: |
+  Nahraj cesťák
+fields:
+  - File: Cestak
+    datatype: files

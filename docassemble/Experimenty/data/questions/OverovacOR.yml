@@ -11,13 +11,11 @@ modules:
 ---
 question: |
   Údaje o společnosti
-subquestion: |
-  <button id="run" class="btn btn-primary">Doplnit údaje z OR</button>
-  
-  <span id="hlasky"></span>
 fields:
   - IČO: Prodejce.ICO
     hint: 12345678
+    note: |
+      <button id="run" class="btn btn-primary">Doplnit údaje z OR</button>
   - Název prodejce: Prodejce.name.text
     required: False
   - Sídlo: Prodejce.address
@@ -25,7 +23,6 @@ fields:
 script: |
   <script type="application/javascript" charset="utf-8">
     $("#run").click(function(){
-      $("#hlasky").html("");
       action_call('myaction', {firma: val('Prodejce.name.text'), ico: val('Prodejce.ICO')}, function(data){
         if (typeof data.test.firma !== 'undefined') {
         setField("Prodejce.name.text", data.test.firma);

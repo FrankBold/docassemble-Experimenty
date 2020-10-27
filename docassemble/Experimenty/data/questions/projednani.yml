@@ -7,12 +7,10 @@ modules:
 ---
 question: |
   O jakou obec se jedná?
-subquestion: |
-  ${ url_of('obyvatele_full.csv', _external=True) }
 fields:
   - Název obce: obec
     default: |
-      Stvolínky
+      Hradec Králové
 ---
 question: |
   Vyberte z jakého okresu je Vámi zadaná obec
@@ -22,11 +20,29 @@ fields:
     code: |
       moznosti
 ---
+event: nenalezeno
+question: |
+  Bohužel jsme nic nenašli, zkuste to znovu.
+buttons:
+  - Zkusit znovu: restart
+---
 mandatory: True
 question: |
   Potřebný počet podpisů
 subquestion: |
   Pro podání žádosti v obci ${ obec } potřebujete ${ pocetPodpis } podpisů.
 ---
+sets: pocetPodpis
 code: |
-  pocetPodpis = pocetObyvatel(obec)
+  vystup = pocetObyvatel(obec)
+  if len(vystup) == 1:
+    pocetPodpis = round(int(vystup[0][2])*0.005)
+  elif len(vystup) == 0:
+    nenalezeno
+  elif len(vystup) > 1:
+    moznosti = []
+    for item in vystup:
+      moznosti.append(item[0])
+    for polozka in vystup:
+      if polozka[0] == okres:
+        pocetPodpis = round(int(polozka[2])*0.005)

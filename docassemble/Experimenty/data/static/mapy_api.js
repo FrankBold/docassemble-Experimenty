@@ -26,13 +26,14 @@ function odpoved(geocoder) { /* Odpověď */
         var souradnice = SMap.Coords.fromWGS84(sourad[0], sourad[1]);
         console.log(item)
         new SMap.Geocoder.Reverse(souradnice, odpoved2)
-        var adresa = item.label.split(", ");
-        var text_adresa = "Ulice: " + adresa[0] + "<br />Město: " + adresa[1];
-        document.querySelector("#adresa").innerHTML = text_adresa;
 }
 
 function odpoved2(geocoder) {
-      var results = geocoder.getResults();
-    console.log(results)
-    alert(results.label);
+  var results = geocoder.getResults();
+  var adresa = results.label.split(", ");
+  setField("clovek.address", adresa[0] + ", " + adresa[2] + " " + adresa[1])
+  setField("clovek.adresa", "${adresa[0]}, ${adresa[2]} ${adresa[1]}")
+  setField("clovek.city", adresa[1])
+  setField("clovek.state", adresa[3])
+  setField("clovek.zip", adresa[2])
 }

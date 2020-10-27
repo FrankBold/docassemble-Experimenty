@@ -1,17 +1,16 @@
 import csv
-from docassemble.base.util import url_of
+from docassemble.base.util import path_and_mimetype
+
+(filename, mimetype) = path_and_mimetype('data/static/obyvatele_full.csv')
+
+__all__ = ['pocetObyvatel']
 
 def pocetObyvatel(obec):
   vysledek = []
-  with open(url_of('obyvatele_full.csv'), newline='', encoding='utf-8') as csvfile:
+  with open(filename, newline='', encoding='utf-8') as csvfile:
       reader = csv.reader(csvfile, delimiter=';')
       for row in reader:
           if row[1] == obec:
-              vysledek.append(round(int(row[2])*0.005))
+              vysledek.append(row)
               
-  if len(vysledek) == 0:
-      return("Bohužel jsme nenašli zadanou obec")
-  elif len(vysledek) > 1:
-      return("Našli jsme toho příliš mnoho")
-  else:
-      return(vysledek[0])
+  return(vysledek)
